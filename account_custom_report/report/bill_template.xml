@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="template_bill_custom">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-set="company" t-value="doc.company_id"/>
+                <t t-call="base_custom_report.custom_external_layout">
+
+                    <style type="text/css">
+                        .content-table { width:100%; border-collapse:collapse; margin-top:10px; }
+                        .content-table th { padding:5px; border:1px solid #000; text-align:left; background-color:#f0f0f0; }
+                        .content-table td { padding:5px; border:1px solid #000; }
+                        .text-right { text-align:right; }
+                        .text-center { text-align:center; }
+                    </style>
+
+                    <div class="row" style="margin-bottom: 20px; align-items: center;">
+                        <div class="col-8" style="font-size:28px !important; font-weight:700;">
+                            <span t-if="doc.move_type == 'out_invoice' and doc.state == 'posted'">CUSTOMER INVOICE</span>
+                            <span t-if="doc.move_type == 'out_invoice' and doc.state == 'draft'">DRAFT INVOICE</span>
+                            <span t-if="doc.move_type == 'in_invoice'">VENDOR BILL</span>
+                            <span t-if="doc.move_type == 'out_refund'">CREDIT NOTE</span>
+                        </div>
+                        <div class="col-4" style="text-align: right; font-size: 20px; font-weight: bold;">
+                            <span t-field="doc.name"/>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-bottom: 20px;">
+                        <div class="col-6">
+                            <strong>Partner: </strong><br/>
+                            <div style="font-size: 16px; font-weight: bold;"><span t-field="doc.partner_id.name"/></div>
+                            <div><span t-field="doc.partner_id.street"/></div>
+                            <div t-if="doc.partner_id.vat">NPWP: <span t-field="doc.partner_id.vat"/></div>
+                        </div>
+                        <div class="col-6">
+                            <div><strong>Invoice Date: </strong> <span t-field="doc.invoice_date"/></div>
+                            <div><strong>Due Date: </strong> <span t-field="doc.invoice_date_due"/></div>
+                            <div t-if="doc.invoice_origin"><strong>Source (PO/SO): </strong> <span t-field="doc.invoice_origin"/></div>
+                        </div>
+                    </div>
+
+                    <table class="content-table">
+                        <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th style="width:10%; text-align:center;">Qty</th>
+                                <th style="width:15%; text-align:right;">Unit Price</th>
+                                <th style="width:15%; text-align:right;">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="doc.invoice_line_ids.filtered(lambda l: not l.display_type)" t-as="line">
+                                <td><span t-field="line.name"/></td>
+                                <td class="text-center"><span t-field="line.quantity"/></td>
+                                <td class="text-right"><span t-field="line.price_unit"/></td>
+                                <td class="text-right"><span t-field="line.price_subtotal"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="row" style="margin-top: 15px; page-break-inside: avoid;">
+                        <div class="col-7">
+                            <t t-if="doc.narration">
+                                <div style="font-size: 11px; color: #333333; padding-right: 20px;">
+                                    <strong style="color: #102e5f;">Notes / Terms:</strong><br/>
+                                    <span t-field="doc.narration"/>
+                                </div>
+                            </t>
+                        </div>
+                        <div class="col-5">
+                            <table style="width:100%; border-collapse:collapse; border:1px solid #000;">
+                                <tr>
+                                    <td style="padding:4px; font-weight:bold; border-bottom:1px solid #000; border-right:none;">Subtotal</td>
+                                    <td class="text-right" style="border-bottom:1px solid #000; border-left:none;"><span t-field="doc.amount_untaxed"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:4px; font-weight:bold; border-bottom:1px solid #000; border-right:none;">Taxes</td>
+                                    <td class="text-right" style="border-bottom:1px solid #000; border-left:none;"><span t-field="doc.amount_tax"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:4px; font-weight:bold; border-right:none; background-color: #f0f0f0;">Total</td>
+                                    <td class="text-right" style="font-weight:bold; border-left:none; background-color: #f0f0f0;"><span t-field="doc.amount_total"/></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-top: 50px; text-align: center; font-size: 13px; page-break-inside: avoid;">
+                        <div class="col-6">
+                            <div style="margin-bottom: 70px;">Dibuat Oleh,</div>
+                            <div style="width: 60%; margin: 0 auto; border-top: 1px solid #000;"></div>
+                            <div style="margin-top: 5px;">(Finance)</div>
+                        </div>
+                        <div class="col-6">
+                            <div style="margin-bottom: 70px;">Diketahui Oleh,</div>
+                            <div style="width: 60%; margin: 0 auto; border-top: 1px solid #000;"></div>
+                            <div style="margin-top: 5px;">(Finance Manager)</div>
+                        </div>
+                    </div>
+
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

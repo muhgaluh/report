@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="dynamic_signature_block">
+        <style type="text/css">
+            .dyn-sig-container {
+                width: 100%; text-align: center; margin-top: 15px; page-break-inside: avoid;
+            }
+            .dyn-sig-table {
+                width: 100%; border-collapse: collapse; table-layout: fixed;
+            }
+            .dyn-sig-td {
+                padding: 0 10px; border: 1px solid white !important;
+                vertical-align: bottom; text-align: center;
+            }
+            .dyn-header-label { font-size: 13px; margin-bottom: 5px; height: 16px; }
+            .dyn-sig-box { height: 80px; width: 100%; text-align: center; vertical-align: bottom; }
+            .dyn-sig-img { max-height: 75px; max-width: 100%; }
+            .dyn-sig-date { font-size: 11px; height: 14px; margin-top: 2px; }
+            .dyn-sig-line { width: 90%; border-top: 1px solid #000; height: 1px; margin: 0 auto; }
+            .dyn-sig-name { text-align: center; font-weight: bold; font-size: 12px; padding-top: 2px; height: 15px; }
+        </style>
+
+        <div class="dyn-sig-container">
+            <table class="dyn-sig-table">
+                <tr>
+                    <t t-foreach="signature_data" t-as="sig">
+                        <td class="dyn-sig-td">
+                            <div class="dyn-header-label" t-esc="sig.get('title')"/>
+                            
+                            <div class="dyn-sig-box">
+                                <img t-if="sig.get('signature')" t-att-src="image_data_uri(sig.get('signature'))" class="dyn-sig-img"/>
+                            </div>
+                            
+                            <div class="dyn-sig-date">
+                                <span t-if="sig.get('date')" t-esc="sig.get('date')" t-options='{"widget": "date", "format": "dd/MM/yyyy"}'/>
+                            </div>
+                            
+                            <div class="dyn-sig-line"/>
+                            
+                            <div class="dyn-sig-name">
+                                <span t-esc="sig.get('name')"/>
+                            </div>
+                        </td>
+                    </t>
+                </tr>
+            </table>
+        </div>
+    </template>
+</odoo>

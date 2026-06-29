@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="account.account_invoices" model="ir.actions.report">
+        <field name="report_name">account_custom_report.template_bill_custom</field>
+        <field name="paperformat_id" ref="base_custom_report.paperformat_base_custom"/>
+    </record>
+</odoo>

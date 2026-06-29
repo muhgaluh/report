@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="custom_external_layout_watermark" inherit_id="base_custom_report.custom_external_layout">
+        <xpath expr="//div[hasclass('article')]" position="before">
+
+            <t t-if="o and 'is_report_draft_status' in o and o.is_report_draft_status">
+                <div style="position: absolute; top: 35%; left: 15%; z-index: -1;
+                            transform: rotate(-45deg); opacity: 0.15; color: red;
+                            font-size: 130px; font-weight: bold; text-align: center;
+                            white-space: nowrap; pointer-events: none;">
+                    UNAPPROVED
+                </div>
+            </t>
+
+        </xpath>
+    </template>
+</odoo>

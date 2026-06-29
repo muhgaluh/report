@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="template_delivery_custom">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+
+                <t t-set="company" t-value="doc.company_id"/>
+
+                <t t-call="base_custom_report.custom_external_layout">
+
+                    <style type="text/css">
+                        .do-content-table { width:100%; border-collapse:collapse; margin-top:10px; margin-bottom:15px; page-break-inside: avoid; }
+                        .do-content-table th { padding:6px; border:1px solid #000; text-align:center; background-color:#f0f0f0; }
+                        .do-content-table td { padding:6px; border:1px solid #000; vertical-align: middle; }
+                        .text-center { text-align:center; }
+                        .text-left { text-align:left; }
+                        .text-right { text-align:right; }
+
+                        .fake-checkbox {
+                            display: inline-block;
+                            width: 13px;
+                            height: 13px;
+                            border: 1px solid #000;
+                            margin-right: 6px;
+                            vertical-align: middle;
+                        }
+                        .keperluan-table { width:100%; border-collapse:collapse; }
+                        .keperluan-table td { border:none !important; padding:2px 0; }
+                    </style>
+
+                    <div class="row" style="margin-bottom: 15px; align-items: center;">
+                        <div class="col-7" style="font-size:32px !important; font-weight:700; color:#102e5f; letter-spacing:-0.5px;">
+                            DELIVERY ORDER
+                        </div>
+                        <div class="col-5" style="text-align: right;">
+                            <div style="display: inline-block; text-align: right; width: 250px;">
+                                <span t-field="doc.name" t-options="{'widget': 'barcode', 'symbology': 'Code128', 'width': 600, 'height': 100, 'img_style': 'width:100%; height:40px;'}"/>
+                                <div style="font-size: 12px; letter-spacing: 2px; font-family: monospace; font-weight: bold; margin-top: 4px;">
+                                    *<span t-esc="doc.name"/>*
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-bottom: 15px; font-size: 13px;">
+                        <div class="col-6" style="padding-right: 15px;">
+                            <div style="font-weight:700; margin-bottom:3px; color:#555555;">Kepada Yth:</div>
+                            <div style="font-size:15px; font-weight:700; margin-bottom:2px;">
+                                <span t-esc="(doc.partner_id and doc.partner_id.name or 'N/A').upper()"/>
+                            </div>
+                            <div t-if="doc.partner_id.street"><span t-field="doc.partner_id.street"/></div>
+                            <div t-if="doc.partner_id.street2"><span t-field="doc.partner_id.street2"/></div>
+                            <div>
+                                <span t-if="doc.partner_id.city" t-field="doc.partner_id.city"/>
+                                <span t-if="doc.partner_id.zip"> (<span t-field="doc.partner_id.zip"/>)</span>
+                            </div>
+                            <div t-if="doc.partner_id.phone">Telp: <span t-field="doc.partner_id.phone"/></div>
+                            <div t-if="doc.partner_id.vat" style="margin-top:4px; font-size:11px;">
+                                <strong>NPWP:</strong> <span t-field="doc.partner_id.vat"/>
+                            </div>
+                        </div>
+
+                        <div class="col-6" style="padding-left: 30px; border-left: 1px dashed #cccccc; line-height: 1.6;">
+                            <strong style="color:#555555;">Untuk Keperluan:</strong>
+                            <table class="keperluan-table" style="margin-top: 5px;">
+                                <tr>
+                                    <td style="width:50%;"><span class="fake-checkbox"/> Service</td>
+                                    <td style="width:50%;"><span class="fake-checkbox"/> Dipinjamkan</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="fake-checkbox"/> Subkont</td>
+                                    <td><span class="fake-checkbox"/> Dijual</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="fake-checkbox"/> Return</td>
+                                    <td><span class="fake-checkbox"/> _ _ _ _ _ _ _ _ _ _ _</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <table style="width:100%; border:1px solid #000; border-collapse:collapse; margin-bottom:15px; font-size:13px;">
+                        <tr>
+                            <td style="width:50%; padding:7px; border-right:1px solid #000;">
+                                <strong>Delivery Order Number:</strong>
+                                <span style="margin-left:8px; font-weight:bold;" t-field="doc.name"/>
+                            </td>
+                            <td style="width:50%; padding:7px;">
+                                <strong>Delivery Date:</strong>
+                                <span style="margin-left:8px;" t-if="doc.date_done" t-field="doc.date_done" t-options='{"widget":"datetime","format":"dd/MM/yyyy HH:mm:ss"}'/>
+                                <span style="margin-left:8px;" t-if="not doc.date_done" t-field="doc.scheduled_date" t-options='{"widget":"datetime","format":"dd/MM/yyyy"}'/>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <table class="do-content-table">
+                        <thead>
+                            <tr>
+                                <th style="width:5%;">No</th>
+                                <th style="width:15%; text-align:left;">Kode Barang</th>
+                                <th style="text-align:left;">Nama Barang</th>
+                                <th style="width:18%;">Barcode</th>
+                                <th style="width:15%; text-align:right;">Jumlah</th>
+                                <th style="width:15%; text-align:left;">Keterangan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-set="line_no" t-value="0"/>
+                            <t t-foreach="doc.move_ids_without_package" t-as="line">
+                                <t t-set="line_no" t-value="line_no + 1"/>
+                                <tr>
+                                    <td class="text-center"><span t-esc="line_no"/></td>
+                                    <td class="text-left"><span t-field="line.product_id.default_code"/></td>
+                                    <td class="text-left"><span t-field="line.product_id.name"/></td>
+                                    <td class="text-center">
+                                        <t t-if="line.product_id.barcode">
+                                            <span t-field="line.product_id.barcode" t-options="{'widget': 'barcode', 'symbology': 'Code128', 'width': 400, 'height': 100, 'img_style': 'width:100%; max-height:25px; object-fit:contain;'}"/>
+                                        </t>
+                                    </td>
+                                    <td class="text-right">
+                                        <t t-if="line.quantity_done > 0">
+                                            <span t-field="line.quantity_done" t-options='{"widget":"float","precision": 2}'/>
+                                        </t>
+                                        <t t-else="">
+                                            <span t-field="line.product_uom_qty" t-options='{"widget":"float","precision": 2}'/>
+                                        </t>
+                                        <span t-field="line.product_uom.name" style="margin-left:4px;"/>
+                                    </td>
+                                    <td class="text-left"></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                    <div t-if="doc.note" style="margin-bottom: 25px; font-size: 12px; color: #333333;">
+                        <strong>Catatan Internal:</strong> <span t-field="doc.note"/>
+                    </div>
+
+                    <div class="row" style="margin-top: 40px; text-align: center; font-size: 13px; page-break-inside: avoid;">
+                        <div class="col-4">
+                            <div style="margin-bottom: 65px;">Diberikan oleh,</div>
+                            <div style="width: 80%; margin: 0 auto; border-top: 1px solid #000;"></div>
+                            <div style="margin-top: 4px; font-size: 11px; color: #555555;">(Gudang)</div>
+                        </div>
+                        <div class="col-4">
+                            <div style="margin-bottom: 65px;">Mengetahui,</div>
+                            <div style="width: 80%; margin: 0 auto; border-top: 1px solid #000;"></div>
+                            <div style="margin-top: 4px; font-size: 11px; color: #555555;">(Security)</div>
+                        </div>
+                        <div class="col-4">
+                            <div style="margin-bottom: 18px; font-size: 12px; color: #333333; text-align: center;">
+                                ...................., ................ 20...
+                            </div>
+                            <div style="margin-bottom: 35px;">Diterima oleh,</div>
+                            <div style="width: 80%; margin: 0 auto; border-top: 1px solid #000;"></div>
+                            <div style="margin-top: 4px; font-size: 11px; color: #555555;">(Nama Terang &amp; Cap)</div>
+                        </div>
+                    </div>
+
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

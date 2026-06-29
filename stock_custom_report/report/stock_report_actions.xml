@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="stock.action_report_delivery" model="ir.actions.report">
+        <field name="report_name">stock_custom_report.template_delivery_custom</field>
+        <field name="paperformat_id" ref="base_custom_report.paperformat_base_custom"/>
+    </record>
+
+    <record id="stock.action_report_picking" model="ir.actions.report">
+        <field name="report_name">stock_custom_report.template_picking_custom</field>
+        <field name="paperformat_id" ref="base_custom_report.paperformat_base_custom"/>
+    </record>
+</odoo>

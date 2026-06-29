@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="paperformat_base_custom" model="report.paperformat">
+            <field name="name">A4 Base Custom (Global)</field>
+            <field name="format">A4</field>
+            <field name="margin_top">30</field>
+            <field name="margin_bottom">45</field>
+            <field name="margin_left">10</field>
+            <field name="margin_right">10</field>
+            <field name="header_spacing">25</field>
+            <field name="orientation">Portrait</field>
+            <field name="dpi">96</field>
+        </record>
+    </data>
+</odoo>

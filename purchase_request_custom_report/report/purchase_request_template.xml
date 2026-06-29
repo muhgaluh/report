@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="template_purchase_request_custom">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+
+                <t t-set="company" t-value="doc.company_id"/>
+
+                <t t-call="base_custom_report.custom_external_layout">
+
+                    <style type="text/css">
+                        .pr-content-table { width:100%; border-collapse:collapse; margin-top:10px; margin-bottom:20px; }
+                        .pr-content-table th { padding:5px; border:1px solid #000; text-align:left; background-color:#f0f0f0; }
+                        .pr-content-table td { padding:5px; border:1px solid #000; }
+                        .text-center { text-align:center; }
+                        .text-right { text-align:right; }
+                    </style>
+
+                    <div class="row" style="margin-bottom: 20px; align-items: center;">
+                        <div class="col-6" style="font-size:28px !important; font-weight:700;">
+                            PURCHASE REQUEST
+                        </div>
+                        <div class="col-6" style="text-align: right;">
+                            <div style="display: inline-block; text-align: right; width: 250px;">
+                                <span t-field="doc.name" t-options="{'widget': 'barcode', 'symbology': 'Code128', 'width': 600, 'height': 100, 'img_style': 'width:100%; height:40px;'}"/>
+                                <div style="font-size: 12px; letter-spacing: 2px; font-family: monospace; font-weight: bold; margin-top: 4px;">
+                                    *PR-<span t-esc="doc.name"/>*
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-bottom: 20px; font-size:13px;">
+                        <div class="col-6">
+                            <div><strong>Requested by:</strong> <span t-field="doc.requested_by.name"/></div>
+                            <div t-if="doc.assigned_to"><strong>Assigned to:</strong> <span t-field="doc.assigned_to.name"/></div>
+                        </div>
+                        <div class="col-6" style="text-align: right;">
+                            <div><strong>Creation Date:</strong> <span t-field="doc.date_start" t-options='{"widget":"date","format":"dd/MM/yyyy"}'/></div>
+                            <div t-if="doc.origin"><strong>Source Document:</strong> <span t-field="doc.origin"/></div>
+                        </div>
+                    </div>
+
+                    <table class="pr-content-table">
+                        <thead>
+                            <tr>
+                                <th style="width:5%; text-align:center;">No</th>
+                                <th style="width:20%;">Kode Barang</th>
+                                <th>Description</th>
+                                <th style="width:15%; text-align:right;">Estimated Qty</th>
+                                <th style="width:15%; text-align:center;">Date Required</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-set="line_no" t-value="0"/>
+                            <tr t-foreach="doc.line_ids" t-as="line">
+                                <t t-set="line_no" t-value="line_no + 1"/>
+                                <td class="text-center"><span t-esc="line_no"/></td>
+                                <td><span t-field="line.product_id.default_code"/></td>
+                                <td><span t-field="line.name"/></td>
+                                <td class="text-right">
+                                    <span t-field="line.product_qty"/> <span t-field="line.product_uom_id.name"/>
+                                </td>
+                                <td class="text-center">
+                                    <span t-field="line.date_required" t-options='{"widget":"date","format":"dd/MM/yyyy"}'/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div t-if="doc.description" class="row" style="margin-top: 15px; page-break-inside: avoid;">
+                        <div class="col-12">
+                            <div style="font-size: 11px; color: #333333; text-align: justify; border-top: 1px dashed #ccc; padding-top: 10px;">
+                                <strong style="font-size: 12px; color: #102e5f;">Reason / Description for Request:</strong><br/>
+                                <span t-field="doc.description"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="clear: both; padding-top: 40px; page-break-inside: avoid;">
+                        <t t-set="signature_data" t-value="doc.get_tier_signature_data()"/>
+                        <t t-call="base_custom_report_tier_validation.dynamic_signature_block"/>
+                    </div>
+
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

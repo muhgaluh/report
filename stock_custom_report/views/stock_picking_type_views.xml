@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_picking_type_form_inherit_custom_title" model="ir.ui.view">
+        <field name="name">stock.picking.type.form.inherit.custom.title</field>
+        <field name="model">stock.picking.type</field>
+        <field name="inherit_id" ref="stock.view_picking_type_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='sequence_code']" position="after">
+                <field name="custom_report_title"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
