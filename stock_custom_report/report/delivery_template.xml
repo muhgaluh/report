@@ -28,56 +28,134 @@
                         .keperluan-table td { border:none !important; padding:2px 0; }
                     </style>
 
-                    <div class="row" style="margin-bottom: 15px; align-items: center;">
-                        <div class="col-7" style="font-size:32px !important; font-weight:700; color:#102e5f; letter-spacing:-0.5px;">
-                            DELIVERY ORDER
-                        </div>
-                        <div class="col-5" style="text-align: right;">
-                            <div style="display: inline-block; text-align: right; width: 250px;">
-                                <span t-field="doc.name" t-options="{'widget': 'barcode', 'symbology': 'Code128', 'width': 600, 'height': 100, 'img_style': 'width:100%; height:40px;'}"/>
-                                <div style="font-size: 12px; letter-spacing: 2px; font-family: monospace; font-weight: bold; margin-top: 4px;">
-                                    *<span t-esc="doc.name"/>*
+                    <table style="width:100%; margin-bottom:15px; border-collapse:collapse;">
+                        <tr style="vertical-align:middle;">
+                    
+                            <!-- Judul -->
+                            <td style="width:70%; vertical-align:middle;">
+                                <div style="font-size:29px; font-weight:700; color:#102e5f; line-height:40px; letter-spacing:-0.5px;">
+                                    DELIVERY ORDER
                                 </div>
-                            </div>
-                        </div>
-                    </div>
+                            </td>
+                    
+                            <!-- Barcode -->
+                            <td style="width:30%; text-align:right; vertical-align:middle;">
+                    
+                                <div style="display:inline-block; width:260px;">
+                    
+                                    <span t-field="doc.name"
+                                        t-options="{
+                                            'widget':'barcode',
+                                            'symbology':'Code128',
+                                            'width':600,
+                                            'height':100,
+                                            'img_style':'width:100%; height:40px;'
+                                        }"/>
+                    
+                                    <div style="margin-top:4px; text-align:center; font-size:12px; font-family:monospace; font-weight:bold; letter-spacing:2px;">
+                                        *<span t-esc="doc.name"/>*
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
 
-                    <div class="row" style="margin-bottom: 15px; font-size: 13px;">
-                        <div class="col-6" style="padding-right: 15px;">
-                            <div style="font-weight:700; margin-bottom:3px; color:#555555;">Kepada Yth:</div>
-                            <div style="font-size:15px; font-weight:700; margin-bottom:2px;">
-                                <span t-esc="(doc.partner_id and doc.partner_id.name or 'N/A').upper()"/>
-                            </div>
-                            <div t-if="doc.partner_id.street"><span t-field="doc.partner_id.street"/></div>
-                            <div t-if="doc.partner_id.street2"><span t-field="doc.partner_id.street2"/></div>
-                            <div>
-                                <span t-if="doc.partner_id.city" t-field="doc.partner_id.city"/>
-                                <span t-if="doc.partner_id.zip"> (<span t-field="doc.partner_id.zip"/>)</span>
-                            </div>
-                            <div t-if="doc.partner_id.phone">Telp: <span t-field="doc.partner_id.phone"/></div>
-                            <div t-if="doc.partner_id.vat" style="margin-top:4px; font-size:11px;">
-                                <strong>NPWP:</strong> <span t-field="doc.partner_id.vat"/>
-                            </div>
-                        </div>
-
-                        <div class="col-6" style="padding-left: 30px; border-left: 1px dashed #cccccc; line-height: 1.6;">
-                            <strong style="color:#555555;">Untuk Keperluan:</strong>
-                            <table class="keperluan-table" style="margin-top: 5px;">
-                                <tr>
-                                    <td style="width:50%;"><span class="fake-checkbox"/> Service</td>
-                                    <td style="width:50%;"><span class="fake-checkbox"/> Dipinjamkan</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="fake-checkbox"/> Subkont</td>
-                                    <td><span class="fake-checkbox"/> Dijual</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="fake-checkbox"/> Return</td>
-                                    <td><span class="fake-checkbox"/> _ _ _ _ _ _ _ _ _ _ _</td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
+                    <table style="width:100%; margin-bottom:15px; border-collapse:collapse; font-size:13px;">
+                        <tr style="vertical-align:top;">
+                    
+                            <!-- ===================== -->
+                            <!-- Kepada Yth -->
+                            <!-- ===================== -->
+                            <td style="width:50%; padding-right:25px; vertical-align:top;">
+                    
+                                <div style="font-weight:700; color:#555555; margin-bottom:5px;">
+                                    Kepada Yth:
+                                </div>
+                    
+                                <div style="font-size:15px; font-weight:bold; margin-bottom:3px;">
+                                    <span t-esc="(doc.partner_id.name or '').upper()"/>
+                                </div>
+                    
+                                <div style="margin-bottom:2px;">
+                                    <span t-field="doc.partner_id.street"/>
+                                </div>
+                    
+                                <div t-if="doc.partner_id.street2" style="margin-bottom:2px;">
+                                    <span t-field="doc.partner_id.street2"/>
+                                </div>
+                    
+                                <div style="margin-bottom:2px;">
+                                    <span t-field="doc.partner_id.city"/>
+                                    <t t-if="doc.partner_id.zip">
+                                        (<span t-field="doc.partner_id.zip"/>)
+                                    </t>
+                                </div>
+                    
+                                <div t-if="doc.partner_id.phone" style="margin-top:4px;">
+                                    Telp:
+                                    <span t-field="doc.partner_id.phone"/>
+                                </div>
+                    
+                                <div t-if="doc.partner_id.vat"
+                                     style="margin-top:4px;font-size:11px;">
+                                    <strong>NPWP:</strong>
+                                    <span t-field="doc.partner_id.vat"/>
+                                </div>
+                    
+                            </td>
+                    
+                            <!-- ===================== -->
+                            <!-- Garis Tengah -->
+                            <!-- ===================== -->
+                            <td style="width:1%; border-left:1px dashed #cfcfcf;"></td>
+                    
+                            <!-- ===================== -->
+                            <!-- Untuk Keperluan -->
+                            <!-- ===================== -->
+                            <td style="width:49%; padding-left:25px; vertical-align:top;">
+                    
+                                <div style="font-weight:700; color:#555555; margin-bottom:6px;">
+                                    Untuk Keperluan:
+                                </div>
+                    
+                                <table style="width:100%; border-collapse:collapse;">
+                    
+                                    <tr>
+                                        <td style="width:50%; border:1px solid #555; padding:4px;">
+                                            &#9744; Service
+                                        </td>
+                    
+                                        <td style="border:1px solid #555; padding:4px;">
+                                            &#9744; Dipinjamkan
+                                        </td>
+                                    </tr>
+                    
+                                    <tr>
+                                        <td style="border:1px solid #555; padding:4px;">
+                                            &#9744; Subkont
+                                        </td>
+                    
+                                        <td style="border:1px solid #555; padding:4px;">
+                                            &#9744; Dijual
+                                        </td>
+                                    </tr>
+                    
+                                    <tr>
+                                        <td style="border:1px solid #555; padding:4px;">
+                                            &#9744; Return
+                                        </td>
+                    
+                                        <td style="border:1px solid #555; padding:4px;">
+                                            &#9744; ____________
+                                        </td>
+                                    </tr>
+                    
+                                </table>
+                    
+                            </td>
+                    
+                        </tr>
+                    </table>
 
                     <table style="width:100%; border:1px solid #000; border-collapse:collapse; margin-bottom:15px; font-size:13px;">
                         <tr>
@@ -136,27 +214,60 @@
                         <strong>Catatan Internal:</strong> <span t-field="doc.note"/>
                     </div>
 
-                    <div class="row" style="margin-top: 40px; text-align: center; font-size: 13px; page-break-inside: avoid;">
-                        <div class="col-4">
-                            <div style="margin-bottom: 65px;">Diberikan oleh,</div>
-                            <div style="width: 80%; margin: 0 auto; border-top: 1px solid #000;"></div>
-                            <div style="margin-top: 4px; font-size: 11px; color: #555555;">(Gudang)</div>
-                        </div>
-                        <div class="col-4">
-                            <div style="margin-bottom: 65px;">Mengetahui,</div>
-                            <div style="width: 80%; margin: 0 auto; border-top: 1px solid #000;"></div>
-                            <div style="margin-top: 4px; font-size: 11px; color: #555555;">(Security)</div>
-                        </div>
-                        <div class="col-4">
-                            <div style="margin-bottom: 18px; font-size: 12px; color: #333333; text-align: center;">
-                                ...................., ................ 20...
-                            </div>
-                            <div style="margin-bottom: 35px;">Diterima oleh,</div>
-                            <div style="width: 80%; margin: 0 auto; border-top: 1px solid #000;"></div>
-                            <div style="margin-top: 4px; font-size: 11px; color: #555555;">(Nama Terang &amp; Cap)</div>
-                        </div>
-                    </div>
-
+                    <table style="width:100%; margin-top:45px; text-align:center; border-collapse:collapse; page-break-inside:avoid; font-size:13px;">
+                        <tr style="vertical-align:top;">
+                    
+                            <!-- Diberikan oleh -->
+                            <td style="width:33.33%; padding:0 10px;">
+                    
+                                <div style="margin-bottom:70px;">
+                                    Diberikan oleh,
+                                </div>
+                    
+                                <div style="border-top:1px solid #000; width:85%; margin:0 auto;"></div>
+                    
+                                <div style="margin-top:6px; font-size:11px; color:#555;">
+                                    (Gudang)
+                                </div>
+                    
+                            </td>
+                    
+                            <!-- Mengetahui -->
+                            <td style="width:33.33%; padding:0 10px;">
+                    
+                                <div style="margin-bottom:70px;">
+                                    Mengetahui,
+                                </div>
+                    
+                                <div style="border-top:1px solid #000; width:85%; margin:0 auto;"></div>
+                    
+                                <div style="margin-top:6px; font-size:11px; color:#555;">
+                                    (Security)
+                                </div>
+                    
+                            </td>
+                    
+                            <!-- Diterima -->
+                            <td style="width:33.33%; padding:0 10px;">
+                    
+                                <div style="margin-bottom:8px; font-size:12px;">
+                                    ....................., ................. 20....
+                                </div>
+                    
+                                <div style="margin-bottom:45px;">
+                                    Diterima oleh,
+                                </div>
+                    
+                                <div style="border-top:1px solid #000; width:85%; margin:0 auto;"></div>
+                    
+                                <div style="margin-top:6px; font-size:11px; color:#555;">
+                                    (Nama Terang &amp; Cap)
+                                </div>
+                    
+                            </td>
+                    
+                        </tr>
+                    </table>
                 </t>
             </t>
         </t>

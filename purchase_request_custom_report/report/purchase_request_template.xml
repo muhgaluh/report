@@ -16,30 +16,74 @@
                         .text-right { text-align:right; }
                     </style>
 
-                    <div class="row" style="margin-bottom: 20px; align-items: center;">
-                        <div class="col-6" style="font-size:28px !important; font-weight:700;">
-                            PURCHASE REQUEST
-                        </div>
-                        <div class="col-6" style="text-align: right;">
-                            <div style="display: inline-block; text-align: right; width: 250px;">
-                                <span t-field="doc.name" t-options="{'widget': 'barcode', 'symbology': 'Code128', 'width': 600, 'height': 100, 'img_style': 'width:100%; height:40px;'}"/>
-                                <div style="font-size: 12px; letter-spacing: 2px; font-family: monospace; font-weight: bold; margin-top: 4px;">
-                                    *PR-<span t-esc="doc.name"/>*
+                    <table style="width:100%; margin-bottom:20px; border-collapse:collapse;">
+                        <tr style="vertical-align:middle;">
+                    
+                            <!-- Judul -->
+                            <td style="width:70%; vertical-align:middle;">
+                                <div style="font-size:29px; font-weight:700; line-height:40px; margin:0; padding:0; color:#102e5f;">
+                                    PURCHASE REQUEST
                                 </div>
-                            </div>
-                        </div>
-                    </div>
+                            </td>
+                    
+                            <!-- Barcode -->
+                            <td style="width:30%; text-align:right; vertical-align:middle;">
+                                <div style="display:inline-block; width:260px;">
+                    
+                                    <span t-field="doc.name"
+                                        t-options="{
+                                            'widget':'barcode',
+                                            'symbology':'Code128',
+                                            'width':600,
+                                            'height':100,
+                                            'img_style':'width:100%; height:40px;'
+                                        }"/>
+                    
+                                    <div style="margin-top:4px; text-align:center; font-size:12px; font-family:monospace; font-weight:bold; letter-spacing:2px;">
+                                        *PR-<span t-esc="doc.name"/>*
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
 
-                    <div class="row" style="margin-bottom: 20px; font-size:13px;">
-                        <div class="col-6">
-                            <div><strong>Requested by:</strong> <span t-field="doc.requested_by.name"/></div>
-                            <div t-if="doc.assigned_to"><strong>Assigned to:</strong> <span t-field="doc.assigned_to.name"/></div>
-                        </div>
-                        <div class="col-6" style="text-align: right;">
-                            <div><strong>Creation Date:</strong> <span t-field="doc.date_start" t-options='{"widget":"date","format":"dd/MM/yyyy"}'/></div>
-                            <div t-if="doc.origin"><strong>Source Document:</strong> <span t-field="doc.origin"/></div>
-                        </div>
-                    </div>
+                    <table style="width:100%; margin-bottom:20px; border-collapse:collapse; font-size:13px;">
+                        <tr style="vertical-align:top;">
+                    
+                            <!-- Kiri -->
+                            <td style="width:50%;">
+                    
+                                <div style="margin-bottom:3px;">
+                                    <strong>Requested by:</strong>
+                                    <span t-field="doc.requested_by.name"/>
+                                </div>
+                    
+                                <div t-if="doc.assigned_to">
+                                    <strong>Assigned to:</strong>
+                                    <span t-field="doc.assigned_to.name"/>
+                                </div>
+                    
+                            </td>
+                    
+                            <!-- Kanan -->
+                            <td style="width:50%; text-align:right;">
+                    
+                                <div style="margin-bottom:3px;">
+                                    <strong>Creation Date:</strong>
+                                    <span t-field="doc.date_start"
+                                          t-options='{"widget":"date","format":"dd/MM/yyyy"}'/>
+                                </div>
+                    
+                                <!-- <div t-if="doc.origin"><strong>Source Document:</strong> <span t-field="doc.origin"/></div> -->
+                                <div>
+                                    <strong>Source Document:</strong>
+                                    <span t-esc="doc.origin or '-'"/>
+                                </div>
+                    
+                            </td>
+                    
+                        </tr>
+                    </table>
 
                     <table class="pr-content-table">
                         <thead>
@@ -68,14 +112,17 @@
                         </tbody>
                     </table>
 
-                    <div t-if="doc.description" class="row" style="margin-top: 15px; page-break-inside: avoid;">
-                        <div class="col-12">
-                            <div style="font-size: 11px; color: #333333; text-align: justify; border-top: 1px dashed #ccc; padding-top: 10px;">
-                                <strong style="font-size: 12px; color: #102e5f;">Reason / Description for Request:</strong><br/>
+                    <t t-if="doc.description">
+                        <div style="margin-top:18px; padding-top:8px; border-top:1px dashed #d0d0d0; page-break-inside:avoid; font-size:12px;">
+                            <div style="font-weight:bold; color:#102e5f; margin-bottom:3px;">
+                                Reason / Description for Request:
+                            </div>
+                    
+                            <div style="font-size:11px; color:#444444; line-height:1.5;">
                                 <span t-field="doc.description"/>
                             </div>
                         </div>
-                    </div>
+                    </t>
 
                     <div style="clear: both; padding-top: 40px; page-break-inside: avoid;">
                         <t t-set="signature_data" t-value="doc.get_tier_signature_data()"/>
